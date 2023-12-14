@@ -1,0 +1,249 @@
+/* Reset padding and margin */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 20px 30px;
+  font: 18px "Avenir", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+}
+
+header,
+footer,
+.main-container {
+  max-width: 90ex;
+  margin: 20px auto;
+}
+
+.disclaimer {
+  max-width: 90ex;
+  margin: 20px auto;
+  position: relative;
+}
+
+header {
+  padding-bottom: 16px;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
+}
+
+footer {
+  border-top: 2px solid #ccc;
+  padding-top: 16px;
+  text-align: right;
+}
+
+h1 {
+  margin-bottom: 32px;
+  color: #492a7c;
+}
+
+a {
+  text-decoration: none;
+}
+
+#infobar {
+  flex: 1; /* Grow to occupy available space */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align children (the visualization) horizontally */
+  justify-content: center; /* Center-align children (the visualization) vertically */
+  width: 100%; /* Full width */
+}
+
+#winnerTitle {
+  font-size: 14px; /* Adjust the size as needed */
+  font-weight: bold; /* Makes the text bold */
+  color: green; /* A shade of blue, you can use any hex color code */
+  text-align: center; /* Centers the text within its container */
+  margin: 0px 0; /* Adds space above and below the div */
+  padding: 5px; /* Adds space inside the div, around the text */
+  background-color: lightgreen; /* A light blue background color */
+  border-radius: 5px; /* Rounds the corners of the div */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
+  width: fit-content; /* Ensures the div is only as wide as its content */
+  margin-left: auto; /* These two margin settings */
+  margin-right: auto; /* Center the div if it's not full width */
+  flex-direction: row;
+}
+
+#votebar-container {
+  flex: 1; /* Grow to occupy available space */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align children (the visualization) horizontally */
+  justify-content: center; /* Center-align children (the visualization) vertically */
+  width: 100%; /* Full width */
+}
+
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align children (the visualization) horizontally */
+  justify-content: center; /* Center-align children (the visualization) vertically */
+}
+
+#legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align children (the visualization) horizontally */
+  justify-content: center; /* Center-align children (the visualization) vertically */
+}
+
+#mapAndLegend {
+  display: flex; /* Establishes a flex container */
+  flex: 1;
+  align-items: center; /* Aligns children to the start of the container vertically */
+  justify-content: center; /* Aligns children to the start of the container horizontally */
+}
+
+.map-container {
+  position: relative;
+}
+
+.controls {
+  display: flex;
+  justify-content: center; /* Aligns items on the main axis (opp to flex-dir) */
+  align-items: center; /* Aligns items on the cross axis (same as flex-dir) */
+  flex-direction: row; 
+  width: 100%;
+  padding: 10px 10px;
+}
+
+.col-container {
+  display: flex;
+  justify-content: center; /* Aligns items on the main axis (horizontal by default) */
+  align-items: center; /* Aligns items on the cross axis (vertical by default) */
+  flex-direction: column; /* Stacks flex items vertically */
+  margin: 0 10px;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center; /* Aligns items on the main axis (horizontal by default) */
+  align-items: center; /* Aligns items on the cross axis (vertical by default) */
+  flex-direction: row; /* Stacks flex items horizontally */
+  height: 100px; /* Or whatever height you desire */
+}
+
+#yearDisplay {
+  margin-bottom: 0px; /* Adds space between the year display and the buttons */
+  flex-direction: row;
+  margin: 0; /* Removes any default margin */
+  padding: 0.5em; /* Adds some padding around the text */
+  white-space: nowrap; /* Prevents the text from wrapping */
+  font-weight: bold;
+}
+
+button {
+  margin: 5px; /* Adds space around the buttons */
+}
+
+.tooltip {
+  text-align: center;
+  white-space: nowrap;
+  font-size: 0.85em;
+}
+
+.tooltip-content {
+  padding: 4px;
+}
+
+.party {
+  display: block;
+  margin: 2px 0;
+}
+
+.democrat {
+  color: #3333FF;
+}
+
+.republican {
+  color: #FF3333;
+}
+
+.total {
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.info-panel {
+  display: none; 
+  position: absolute; 
+  top: 60%; 
+  left: -10%; 
+  width: auto; 
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  text-align: center;
+  white-space: nowrap;
+  font-size: 0.85em;
+}
+
+#sliderTitle {
+  display: flex; /* Establishes a flex container */
+  justify-content: space-between; /* Spaces out children evenly */
+  align-items: center; /* Centers children vertically in the container */
+}
+
+#sliderContainer {
+  display: flex;        /* Use flexbox layout */
+  justify-content: center; /* Center horizontally */
+  align-items: center;  /* Center vertically */
+  padding: 10px;
+  width: 400px;
+}
+
+#yearSlider {
+  -webkit-appearance: none; /* Override default appearance */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 10px; /* Slider height */
+  background: #ddd; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (cross-browser) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+#yearSlider:hover {
+  opacity: 1; /* Fully opaque on hover */
+}
+
+#yearSlider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4c65af; /* Gray background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+#yearSlider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4c65af; 
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* For IE */
+#yearSlider::-ms-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4c65af; /* Gray background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+#yearSlider::-ms-track {
+  width: 100%;
+  height: 10px; /* Slider height */
+  cursor: pointer; /* Cursor on hover */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Uncomment if you want your page to NOT be indexed by search engines: -->
+  <!-- <meta name="robots" content="none"> -->
+  <title>Evolution of US Voting Trends</title>
+
+  <!-- Uncomment if using d3: -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<!------------------------------------------------------------>
+<!-- You are free to modify this template however you want! -->
+<!------------------------------------------------------------>
+
+<body>
+  <header>
+    <h1><a href="./writeup.html">A3 Write-Up</a></h1>
+    <p>
+      <strong>Team Members</strong>: rohithl, pandehar, parum
+    </p>
+  </header>
+
+  <div class="main-container">
+    <h2>Key Question</h2>
+    <strong>
+      How have the voting decisions of people across the U.S. evolved 
+      over the last 6 presidential elections?
+    </strong>
+    <br>
+    <p>
+      This is a fairly broad question, and one that allows for a considerable degree of 
+      nuance in its interpretation. To most accurately and completely answer this question, 
+      we built a visualization that incorporates multiple visual elements and interactive features, 
+      allowing any viewers to thoroughly explore and understand the topic.
+    </p>
+
+    <br>
+
+    <h2>Datasets</h2>
+    <p>
+      We acquired our geographic plotting data directly from D3:
+      <a href="https://d3js.org/us-10m.v2.json">https://d3js.org/us-10m.v2.json</a>
+    </p>
+    <p>We acquired the bulk of our voting data from the Harvard Dataverse:</p>
+    <strong>County-Level:</strong>
+    <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ">
+      https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ
+    </a>
+    <br>
+    <strong>State-Level:</strong>
+    <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX">
+      https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX
+    </a>
+    <br>
+    <strong>Election Commission (FEC) reports:</strong>
+    <a href="https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/">
+      https://www.fec.gov/introduction-campaign-finance/election-results-and-voting-information/
+    </a>
+    <br><br>
+    <p>
+      We did this because the Harvard datasets were well-formatted for 
+      integration with our visualization, containing data about county codes and vote totals 
+      that were easy to work with, and the FEC reports contained information about electoral
+      college votes, which the Harvard dataset lacked. By using a visualization that drew upon 
+      elements of all three datasets, we were able to successfully convey a thorough answer to the key question. 
+    </p>
+
+    <br>
+
+    <h2>Data Transformations</h2>
+    <p>
+      To appropriately answer the key question, we needed to apply a number of transformations to the data. Since we had different datasets for county and state, we did some preliminary analysis to ensure that the sum of the county votes by state were the same as the state counts. Then, to get the total number of votes across the country, we aggregated the counts for each state, grouped by the candidate. We grouped together all parties that weren’t Democrats or Republicans into a single category called Other, because none of the other parties ever garnered enough votes to be serious presidential contenders. As such, we left out the counts for other parties in the tooltips you see when you hover over a locality (the total counts displayed are still the accurate totals). However, we still included the sum of the votes for candidates of other parties because it was interesting to see the change in proportion over the years, especially in 2016, when non-major-party candidates got 7 electoral college votes. Another data transformation we applied was converting the vote counts into a color encoding by saturation. With the aggregated total counts, we calculated the percentage of Democratic and Republican votes, which we then mapped to our blue-white-red color scale. In addition to using the two Harvard datasets, we also combined the electoral college votes from the disparate FEC dataset to display at the top of our visualization. This contextualizes the winner of the election, because sometimes the results of the popular vote don’t align with the results of the electoral college vote, and thus the winner of the election. 
+      <br>
+      We applied further transformations when mapping the Harvard data to the D3 geographic data - we needed to map state IDs and county FIPS codes between datasets, resulting in an aggregated set containing the full breadth of shared information. The vast majority of data transformations happened here, as we needed to generate complete mappings of county data across a variety of voting types, such as coalescing absentee, in-person, election day, and provisional votes across a variety of states that lacked cohesive naming schemes.
+    </p>
+    
+    <br>
+
+    <h2>Design Decisions</h2>
+    <ul>
+      <li>
+        <strong>Using a Map:</strong> 
+        When tackling the key question, the first thing that needed to be addressed was the format of our answer. The election results data could be displayed in many simple ways, such as lists, tables, or any number of graphs. However, we chose to represent the data through a map of the country, as election results are inherently geographic in nature. Elections are structured in a way such that, for the majority of the states, the winner in that state takes the entirety of the state's electoral votes. In that regard, we wanted an important element to be the ability to view results on a state basis. Within each state, election results are also grouped locally by the counties, so we wanted this to be another division upon which a user could view results. With these elements in mind, we chose to display this data through a map as it offers an intuitive grouping of our data divisions on the basis of geographic locality. Maps are not only visually engaging, but can help viewers understand regional patterns and demographics. Maps can also be made interactive in several ways, creating more engagement for a user.
+      </li>
+
+      <li>
+        <strong>Year Slider:</strong>
+        Since we wanted to see how voting decisions have changed over time, it was important that any viewer would easily be able to see each year in our timeframe (2000-2020). With one static map, it’s difficult to illustrate a story across multiple years, so we implemented an input slider that would allow the viewer to scroll through data for different years. We wanted to make sure that the viewer knew what year they were currently viewing, so we initially had text above the slider displaying “Current Year: 20XX”, reflecting the year the map was displaying data for. However, as we progressed, we realized that we weren’t prominently displaying the winner of the election anywhere - a relatively important detail. We originally wanted to display the winner of the election as a green title card above the graph, directly and clearly informing the user, but this took up too much vertical space and made the visualization difficult to navigate. To solve this problem, we integrated the former title card into the slider label. Since the slider is roughly in the top center of the page, the title card is a bright green when everything else is red, blue, or grayscale, and viewers would have to look at the slider whenever they’re changing the year, eyes are still drawn to the winner card, and a key piece of information is properly conveyed.
+      </li>
+
+      <li>
+        <strong>Color Scale and Legend:</strong>
+        Since we want to see how the votes changed over time in the US, there are two major groups we needed to easily represent: Democrats and Republicans. Each party is strongly associated with a color - blue and red respectively - so it was easy for us to decide on a way to implement a color scale for this visualization. The intensity of the color intuitively conveys the intensity of a state/county’s affiliation with the associated political party during a given year's election. We illustrate this encoding in our legend: it's a smooth gradient from blue to white to red. Pure white denotes an exact 50-50 split in that state/county, whereas a deeper red or deeper blue denotes a greater percentage of voters in that region voting for the associated party. Since the proportion of the state/county that voted red or blue is a quantitative variable, it was effectively encoded with color saturation as per Mackinlay's effectiveness rankings. The red, white, and blue color scheme is also reminiscent of classic American symbolism: the flag is red white and blue, many national crests and symbols incorporate red white and blue, so beyond the political party affiliations, it made perfect sense to integrate these colors into our visualization about a piece of American history. The legend is placed vertically to the right of our map: initially, we had placed it horizontally below the map, but we noticed we were accumulating too many vertical elements and it was becoming hard to properly view the whole visualization on one normally-sized computer screen. It’s sized to be roughly the same height as the map while being fairly thin which made it large enough to provide a useful visual reference without taking up too much horizontal space. We have 3 labels specifying what the colors on the legend indicate: at the top, middle, and bottom, corresponding to the 3 extreme circumstances that could arise (100% of voters voting for 1 party, or a dead even split).
+      </li>
+      
+      <li>
+        <strong>County Toggle Button:</strong>
+        Since we want to see how American citizens have voted across the past two decades, it’s important to not only look at the state-level, but also the county level, since different counties have widely different populations and sentiments that may influence their voting preferences. However, while we wanted to make sure we included as complete a picture of the voting history as possible, we knew that including a large amount of detail could lead to confusion among users looking for simpler answers. Therefore, while we knew the story across counties would be an essential part of our end product, we wanted to give our viewers the option to simplify their experience. To this end, we added a simple toggle button to switch views with a single click. Users looking for a more granular picture of the voting changes in communities across America can stay on the default county-level view, but users who want a more digestible account of the elections can easily switch to the states-only view. 
+        <br>
+        Instead of a button toggle, we initially considered having a states-only view at a country level, and then allowing users to click on a particular state, zoom in on that state alone, and display the counties. We quickly discarded this idea in favor of the country-wide toggle, since the toggle design enabled users to compare counties across state borders instead of being locked into only one state.
+        <br>
+        In the state view, we chose to render the states with black borders, while in the county view, we rendered state borders in a lighter gray, with no borders on the counties.In the state view, the borders were more highly emphasized because they’re the main focus, but in the county-view they’re de-emphasized so viewers can easily compare counties across state borders. We initially had light gray borders on all of the counties, but we discovered the visualization looked much better without them and allowed us to see voter gradients more easily, so our final product did not include them.
+      </li>
+      
+      <li>
+        <strong>Map County Animation:</strong>
+        There are over 3000 counties in the United States, and retrieving/processing the voter data for each one is a computationally intensive task. We decided to animate the rendering of the counties to provide something visually appealing that catches the eye of the viewer. It also provides the appearance of a shifting gradient from state-level to county-level, as it renders in on top of the state-level map and fills it in over time.
+      </li>
+
+      <li>
+        <strong>Mouseover Tooltips:</strong>
+        We wanted to ensure that the map view doesn't compromise a viewer's ability to get information on the voting results from each state/county. As a result, we opted for mouseover tooltips that show on the side of the screen when a user hovers their mouse over a state/county. These tooltips display information on the number of voters in that locality that voted for each party. The formatting was simple, yet intentional - blue for democrats and red for republicans, aligning with the party colors. We considered a variation on the tooltip that would show a panel adjacent to where the user’s mouse was placed. Ultimately, we decided against this design as we felt it would make the view more cluttered. Though it worked fine for the state view, when it came to counties, we felt it would get in the way of a user maneuvering across them. So, for accessibility and consistency reasons, we decided to pin this panel to a static location on the side of the map to ensure it wouldn’t hinder the readability of the map. We chose to only include popular vote statistics in our tooltips for two reasons. Firstly, our guiding question dealt primarily with people’s voting decisions, which the electoral college didn’t really matter for answering. Secondly, including those numbers would have added an unnecessary amount of informational clutter in a tooltip that’s supposed to be simple.
+      </li>
+
+      <li>
+        <strong>Mouseover Highlighting:</strong>
+        After implementing the tooltips for state/county information, we wanted some sort of visual indicator to the user that they have hovered over that locality. To address this, we temporarily paint the locality that the user hovers over in a green color, indicating that they are viewing the voter information for that location. We chose the color green because the majority of the map is colored red and blue, and green provides the greatest contrast to those two. This may, however, make the visualization slightly less accessible for users with red-green colorblindness. However, most locations are not colored a true solid red or blue; rather, they lie on a gradient. Since we use a true solid green, a user with red-green colorblindness would still be able to see a difference in the gradient on most locations.
+      </li>
+
+      <li>
+        <strong>Map Zoom</strong>
+        The map implements a zoom feature, allowing the user to zoom in up to a factor 8. The reason behind including this interaction was that while the state view shows shapes that are sufficiently large enough for a user to mouse over, the county view shows much smaller shapes that require a degree of precision to navigate to. The ability to zoom in on the map allows the user to more easily navigate through the smaller counties and view their election data. There were other options we considered when trying to address this issue, the main being incorporating a separate single-state view. This would take the form of allowing a user to click on a state, switching to a "zoomed in" view of just that state, where the counties would then be displayed. However, we decided on the zoom interaction because we felt it was important for a user to be able to view county data across a country-wide map. We believe the county view more effectively displays geographic and regional voting trends as compared to the state view because it contains more individual data points, so we kept the country-wide county view.
+      </li>
+
+      <li>
+        <strong>Using Horizontal Stacked Bars:</strong>
+        Using a map alone wasn’t enough to convey the whole story, even with all of the interactive features we included. We wanted to illustrate what voting decisions the entire country had made, but we had no place on the map to list things like the total vote numbers or the candidates in the running. To remedy this, we added two horizontal bars on top of the map, representing the portions of the electoral votes and popular votes that went to the Democratic and Republican candidates. In the tooltip section, we mentioned that we didn’t include the electoral votes because they didn’t mesh with our guiding question, but here, we had different priorities. We added the electoral votes because sometimes, the candidate that wins the popular vote loses the electoral vote and therefore the election, and including only the popular vote could lead to confusion when viewers see that the candidate that got more votes isn’t the one listed as the winner at the top. We stacked the two bars on top of each other so that viewers can easily compare the proportions of electoral votes to popular votes for each candidate, and added labels under each bar to specify the exact number of votes. The Democrat portion is colored blue and the Republican portion is colored red, both corresponding with their primary colors. Since a not-insignificant amount of votes go to non-Democrat/Republican candidates each year, we colored a portion of the bar gray, corresponding to the proportion of total votes (electoral or popular) that didn’t go to the main two parties.
+      </li>
+    </ul>
+
+    <br>
+
+    <h2>Development Process</h2>
+    <p>
+      Our development began with first drawing a static map of the United States containing the states and the counties. To aid with this, we used a topoJSON dataset provided by d3 that contained the shapes for each US state and county. Next, we focused on creating the coloring for each state/county. This was done by parsing through the state and county level voting datasets from Harvard dataverse. For each state/county, we interpreted the voting results as a difference, translating that into a color gradient, with higher values correlating to stronger coloring (the color being dependent on the winning party in each locality). At this point, we also added the toggle button to be able to switch between state/county views. To aid with accessibility and readability, we created a legend indicating what the color gradient depicts. After implementing the color gradient for one election year, we added the year slider so that we could display a similarly formatted colored map for each election year. Once we had an adequate colored map view, we moved onto implementing the different visual interactions (tooltips, highlighting, zoom) to allow users to view the election data on a state/county level in an accessible and intuitive manner. At this point, we also decided to display the total electoral and popular votes on the top of the map to provide the most relevant voting information for each election year. 
+      <br><br>
+      Our responsibility breakdown went as follows:
+      <br>
+      Harshit took charge of building the initial backend infrastructure (rendering a blank map), and adding pieces of interactivity to the map (tooltips, mouse hover highlighting, zoom). Parum took charge of connecting the Harvard datasets to the map (rendering in the appropriate shading for each county/state), and building elements around the map (the slider, infobars, legend). Rohith took charge of maintaining a consistent aesthetic and layout for the website and refining visual elements, as well as patching bugs and inconsistencies in other pieces of the visualization.
+      <br><br>
+      The most time consuming aspect of this project was taking the state and county voting data and transforming it into usable data structures. The transformations included filtering through state/county data for only the frontrunning democrat and republican nominees, mapping state/county party votes to total votes, and calculating a difference value to create the gradient scale. Once the raw data had been translated into mappings for state/county votes, the process for implementing the interactions was greatly simplified. We were also unfamiliar with some d3 elements such as the event handlers, so those aspects took a bit of trial-and-error to figure out. Ultimately, we spent approximately 40-45 people-hours developing this application.
+    </p>
+  </div>
+
+  <footer>
+    <p>
+      <a href=".">Home</a>
+      <br>
+      <a href="https://gitlab.cs.washington.edu/cse442/23au/a3/votingdemo">Repository</a>
+      <br>
+      <a href="https://courses.cs.washington.edu/courses/cse442/23au/">CSE 442 Data Visualization</a>
+      <br>
+      <a href="https://www.washington.edu">University of Washington</a>
+    </p>
+  </footer>
+  
+</body>
+
+</html>
